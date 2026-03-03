@@ -1,0 +1,278 @@
+.go-inside-container {
+  max-width: 920px;
+  width: 100%;
+  background: rgba(18, 16, 27, 0.75);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1.5px solid #b77dff;
+  border-radius: 32px;
+  padding: 2.5rem 2.2rem;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(183, 125, 255, 0.2) inset, 0 0 30px #b77dffcc;
+  transition: box-shadow 0.3s ease;
+  margin: 0 auto;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.go-inside-container:hover {
+  box-shadow: 0 22px 48px rgba(0, 0, 0, 0.9), 0 0 0 2px rgba(183, 125, 255, 0.3) inset, 0 0 45px #b77dff;
+}
+
+.logo-wrapper {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+}
+
+.club-badge {
+  width: 88px;
+  height: 88px;
+  background: linear-gradient(145deg, #231d3b, #0e0b18);
+  border: 2.5px solid #b77dff;
+  border-radius: 40% 60% 60% 40% / 50% 40% 60% 50%;
+  box-shadow: 0 0 25px #b77dff, 0 8px 12px rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 2.6rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-shadow: 0 0 15px #b77dff, 0 0 30px white;
+  transform: rotate(-6deg);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.club-badge:hover {
+  transform: rotate(-2deg) scale(1.02);
+  box-shadow: 0 0 35px #b77dff, 0 0 60px #ffffff70;
+}
+
+.club-badge span {
+  transform: rotate(6deg);
+}
+
+.go-inside-container h1 {
+  font-size: 2.7rem;
+  font-weight: 500;
+  letter-spacing: 6px;
+  text-align: center;
+  color: white;
+  text-shadow: 0 0 10px #b77dff, 0 0 25px #ffffff60;
+  margin-bottom: 0.25rem;
+  word-break: break-word;
+  border-bottom: 2px dashed #b77dff;
+  padding-bottom: 0.8rem;
+  line-height: 1.3;
+}
+
+.subhead {
+  text-align: center;
+  font-size: 1.3rem;
+  color: #cdb9ff;
+  margin: 0.8rem 0 2rem 0;
+  letter-spacing: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.subhead::before, .subhead::after {
+  content: "⚡";
+  opacity: 0.7;
+  font-size: 1.2rem;
+  color: #b77dff;
+}
+
+.button-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+  justify-content: center;
+  margin: 2rem 0 2rem;
+}
+
+.terminal-button {
+  background: rgba(10, 8, 20, 0.7);
+  border: 2px solid #b77dff;
+  border-radius: 60px;
+  color: #b77dff;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 1.5rem;
+  font-weight: 600;
+  padding: 1.2rem 2.2rem;
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 4px;
+  transition: all 0.25s ease;
+  box-shadow: 0 8px 0 rgba(0, 0, 0, 0.5), 0 0 15px rgba(183, 125, 255, 0.3);
+  flex: 1 1 auto;
+  min-width: 280px;
+  backdrop-filter: blur(4px);
+  line-height: 1.2;
+}
+
+.terminal-button:hover:not(:disabled) {
+  background: #b77dff;
+  color: #0b0820;
+  border-color: white;
+  box-shadow: 0 6px 0 #3a2b55, 0 0 28px #b77dff, 0 0 50px #fff3;
+  transform: translateY(-2px);
+}
+
+.terminal-button:active:not(:disabled) {
+  transform: translateY(4px);
+  box-shadow: 0 2px 0 #2a1d40, 0 0 25px #b77dff;
+}
+
+.terminal-button.small {
+  font-size: 1.1rem;
+  padding: 0.8rem 1.8rem;
+  letter-spacing: 2.5px;
+  min-width: 130px;
+  border-radius: 40px;
+}
+
+.terminal-button:disabled {
+  opacity: 0.4;
+  border-color: #5f4a8a;
+  color: #8f7bb3;
+  box-shadow: none;
+  pointer-events: none;
+  background: #1f1b2d;
+}
+
+.access-panel {
+  margin: 30px 0 20px;
+  padding: 28px 24px;
+  border-radius: 28px;
+  background: rgba(26, 20, 40, 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1.5px solid #b77dff;
+  box-shadow: 0 15px 30px -10px black, inset 0 0 30px rgba(183, 125, 255, 0.1);
+  animation: slideFade 0.4s cubic-bezier(0.2, 0.9, 0.3, 1);
+}
+
+@keyframes slideFade {
+  0% { opacity: 0; transform: translateY(-15px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+.access-label {
+  font-size: 1.5rem;
+  margin-bottom: 1.2rem;
+  display: flex;
+  align-items: center;
+  color: white;
+  gap: 10px;
+}
+
+.cursor-blink {
+  animation: blink 1s step-end infinite;
+  font-size: 1.8rem;
+  color: #b77dff;
+  line-height: 1;
+  margin-left: 5px;
+}
+
+@keyframes blink {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0; }
+}
+
+.input-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  align-items: center;
+  margin: 1.5rem 0 1.2rem;
+}
+
+.terminal-input {
+  background: #0b081a;
+  border: 2px solid #b77dff;
+  border-radius: 48px;
+  color: white;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 1.4rem;
+  padding: 1rem 1.8rem;
+  flex: 3 1 280px;
+  outline: none;
+  box-shadow: 0 0 12px rgba(183, 125, 255, 0.3), inset 0 0 10px #00000080;
+  transition: all 0.2s;
+}
+
+.terminal-input:focus {
+  border-color: white;
+  background: #120e24;
+  box-shadow: 0 0 22px #b77dff, inset 0 0 8px #230066;
+}
+
+.terminal-input:disabled {
+  border-color: #5c4b7a;
+  background: #1c172b;
+  color: #a592cc;
+}
+
+.message-area {
+  margin-top: 1.8rem;
+  font-size: 1.25rem;
+  line-height: 1.8;
+  border-top: 1px solid #b77dff;
+  padding-top: 1.5rem;
+  min-height: 100px;
+  white-space: pre-wrap;
+  word-break: break-word;
+  color: #e3d0ff;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 20px;
+  padding: 1.5rem;
+  font-weight: 400;
+}
+
+.status-hint {
+  display: inline-block;
+  background: #231e33;
+  border-radius: 30px;
+  padding: 0.2rem 1.2rem;
+  font-size: 0.85rem;
+  color: #b77dff;
+  border: 1px solid #b77dff;
+  letter-spacing: 1px;
+  margin-top: 0.5rem;
+}
+
+.system-footer {
+  margin-top: 2.5rem;
+  font-size: 1.1rem;
+  border-top: 1px solid #b77dff;
+  padding-top: 1.5rem;
+  display: flex;
+  align-items: center;
+  color: #c7b0ff;
+}
+
+#typingText {
+  color: white;
+  font-weight: 300;
+}
+
+.cursor {
+  display: inline-block;
+  width: 12px;
+  margin-left: 8px;
+  animation: blink 1s step-end infinite;
+  font-size: 1.4rem;
+  color: #b77dff;
+}
+
+@media (max-width: 600px) {
+  .go-inside-container { padding: 1.8rem; }
+  .go-inside-container h1 { font-size: 2rem; letter-spacing: 3px; }
+  .terminal-button { font-size: 1.2rem; padding: 1rem 1.2rem; min-width: 220px; }
+  .club-badge { width: 70px; height: 70px; font-size: 2rem; }
+}
