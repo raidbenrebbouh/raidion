@@ -316,10 +316,14 @@ function GameChallenge() {
     ctx.fill();
   };
 
+  // run once on mount; loadLevel is stable for our use-case
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     loadLevel(0);
   }, []);
 
+  // game loop and event listeners depend on mutable refs
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     const handleKeyDown = (e) => {
       const gs = gameStateRef.current;
