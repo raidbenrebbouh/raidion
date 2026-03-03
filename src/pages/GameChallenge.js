@@ -30,7 +30,7 @@ function GameChallenge() {
     keys: { ArrowLeft: false, ArrowRight: false, Space: false, ArrowUp: false }
   });
 
-  const levelData = [
+  const levelData = React.useMemo(() => [
     {
       platforms: [
         { x: 0, y: 380, w: 800, h: 20 },
@@ -135,7 +135,7 @@ function GameChallenge() {
       order: null,
       name: 'LEVEL 5'
     }
-  ];
+  ], []);
 
   const loadLevel = React.useCallback((levelIndex) => {
     const lvl = levelData[levelIndex];
