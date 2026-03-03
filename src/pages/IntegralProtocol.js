@@ -43,13 +43,6 @@ function IntegralProtocol() {
     }
   };
 
-  // trigger next step when index increases; showNext & steps.length intentionally omitted
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  useEffect(() => {
-    if (stepIndex > 0 && stepIndex < steps.length) {
-      showNext();
-    }
-  }, [stepIndex]);
 
   return (
     <div className="integral-container">

@@ -137,7 +137,7 @@ function GameChallenge() {
     }
   ];
 
-  const loadLevel = (levelIndex) => {
+  const loadLevel = React.useCallback((levelIndex) => {
     const lvl = levelData[levelIndex];
     gameStateRef.current.platforms = lvl.platforms.map(p => ({...p}));
     gameStateRef.current.collectibles = lvl.collectibles.map(c => ({...c, collected: false}));
@@ -162,7 +162,7 @@ function GameChallenge() {
       showPostLevel3Choice: false,
       warningVisible: false
     }));
-  };
+  }, []);
 
   const resetGame = () => {
     setLevelState(prev => ({
@@ -316,14 +316,11 @@ function GameChallenge() {
     ctx.fill();
   };
 
-  // run once on mount; loadLevel is stable for our use-case
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+  // run once on mount
   useEffect(() => {
     loadLevel(0);
-  }, []);
+  }, [loadLevel]);
 
-  // game loop and event listeners depend on mutable refs
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     const handleKeyDown = (e) => {
       const gs = gameStateRef.current;
@@ -346,12 +343,116 @@ function GameChallenge() {
       }
     };
 
+    const localUpdate = () => {
+      const gs = gameStateRef.current;
+      const state = levelState;
+      if (state.showPostLevel3Choice || state.levelComplete || state.levelJustCompleted || state.deathReset) return;
+      let move = 0;
+      if (gs.keys.ArrowLeft) move -= 1;
+      if (gs.keys.ArrowRight) move += 1;
+      gs.player.vx = move * MOVE_SPEED;
+      if ((gs.keys.Space || gs.keys.ArrowUp) && gs.player.onGround) {
+        gs.player.vy = JUMP_FORCE;
+        gs.player.onGround = false;
+      }
+      gs.player.vy += GRAVITY;
+      gs.player.y += gs.player.vy;
+      gs.player.x += gs.player.vx;
+      gs.player.onGround = false;
+      for (let pl of gs.platforms) {
+        if (gs.player.vy >= 0 &&
+            gs.player.y + gs.player.height <= pl.y + 5 &&
+            gs.player.y + gs.player.height + gs.player.vy >= pl.y &&
+            gs.player.x + gs.player.width > pl.x &&
+            gs.player.x < pl.x + pl.w) {
+          gs.player.y = pl.y - gs.player.height;
+          gs.player.vy = 0;
+          gs.player.onGround = true;
+        }
+      }
+      if (gs.player.y > 400) loadLevel(state.currentLevel);
+      for (let e of gs.enemies) {
+        e.x += e.dx;
+        if (e.x <= e.minX || e.x >= e.maxX) e.dx *= -1;
+        if (gs.player.x < e.x + e.w &&
+            gs.player.x + gs.player.width > e.x &&
+            gs.player.y < e.y + e.h &&
+            gs.player.y + gs.player.height > e.y) {
+          loadLevel(state.currentLevel);
+        }
+      }
+      for (let c of gs.collectibles) {
+        if (!c.collected &&
+            gs.player.x < c.x + 20 &&
+            gs.player.x + gs.player.width > c.x &&
+            gs.player.y < c.y + 20 &&
+            gs.player.y + gs.player.height > c.y) {
+          c.collected = true;
+        }
+      }
+    };
+
+    const localDraw = () => {
+      const canvas = canvasRef.current;
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      ctx.clearRect(0, 0, 800, 400);
+      const grad = ctx.createLinearGradient(0, 0, 0, 400);
+      grad.addColorStop(0, '#b2e6ff');
+      grad.addColorStop(0.7, '#f9d77e');
+      ctx.fillStyle = grad;
+      ctx.fillRect(0, 0, 800, 400);
+      const gs = gameStateRef.current;
+      ctx.shadowColor = '#7a4d1a';
+      ctx.shadowBlur = 8;
+      ctx.shadowOffsetY = 4;
+      ctx.fillStyle = '#8b7355';
+      for (let p of gs.platforms) {
+        ctx.fillRect(p.x, p.y, p.w, p.h);
+      }
+      ctx.shadowColor = '#440000';
+      ctx.fillStyle = '#cc0000';
+      for (let e of gs.enemies) {
+        ctx.fillRect(e.x, e.y, e.w, e.h);
+        ctx.fillStyle = '#000';
+        ctx.fillRect(e.x + 5, e.y + 5, 5, 5);
+        ctx.fillRect(e.x + 10, e.y + 5, 5, 5);
+        ctx.fillStyle = '#cc0000';
+      }
+      ctx.shadowColor = 'gold';
+      for (let c of gs.collectibles) {
+        if (!c.collected) {
+          if (c.type === 'star') {
+            drawStar(ctx, c.x + 10, c.y + 10, 8, 5, 0);
+          } else {
+            ctx.fillStyle = c.color;
+            ctx.beginPath();
+            ctx.arc(c.x + 10, c.y + 10, 8, 0, Math.PI * 2);
+            ctx.fill();
+          }
+        }
+      }
+      if (gs.exit.active) {
+        ctx.fillStyle = '#ffff00';
+        ctx.fillRect(gs.exit.x, gs.exit.y, gs.exit.w, gs.exit.h);
+        ctx.fillStyle = '#ff0000';
+        ctx.fillRect(gs.exit.x + 5, gs.exit.y + 5, gs.exit.w - 10, gs.exit.h - 10);
+      }
+      ctx.shadowColor = '#222222';
+      ctx.fillStyle = '#f7d63e';
+      ctx.fillRect(gs.player.x, gs.player.y, gs.player.width, gs.player.height);
+      ctx.fillStyle = '#000000';
+      ctx.fillRect(gs.player.x + 3, gs.player.y + 3, 5, 5);
+      ctx.fillRect(gs.player.x + 12, gs.player.y + 3, 5, 5);
+      ctx.shadowBlur = 0;
+    };
+
     window.addEventListener('keydown', handleKeyDown);
     window.addEventListener('keyup', handleKeyUp);
 
     const gameLoop = setInterval(() => {
-      update();
-      draw();
+      localUpdate();
+      localDraw();
     }, 1000 / 60);
 
     return () => {
@@ -359,7 +460,7 @@ function GameChallenge() {
       window.removeEventListener('keyup', handleKeyUp);
       clearInterval(gameLoop);
     };
-  }, [levelState]);
+  }, [levelState, loadLevel]);
 
   const lvl = levelData[levelState.currentLevel];
 
